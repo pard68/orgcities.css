@@ -1,0 +1,17 @@
+{
+  "name": "orgcities.css",
+  "version": "0.1.0",
+  "description": "A Geocities Inspired stylesheet for Org exported HTML",
+  "main": "build.js",
+  "repository": "git@github.com:pard68/orgcities.css.git",
+  "author": "Ian Pringle <pard@0x44.pw>",
+  "license": "GPLv3",
+  "private": false,
+  "type": "module",
+  "devDependencies": {
+    "sass": "^1.54.5"
+  },
+  "scripts": {
+    "build": "node build.js"
+  }
+}
