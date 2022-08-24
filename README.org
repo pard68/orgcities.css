@@ -1,0 +1,58 @@
+#+title: README
+
+* What
+This is a stylesheet to be used with html exported with ox-html
+* Why
+I found geo-bootstrap and fell in love. I knew I had to use it somehow.
+* How
+Two ways, depending on whether your are interested in inlining all your CSS or just sourcing your CSS from a stylesheet
+** Inline All The CSS!
+Add this to your org-export script/thing (YMMV):
+#+begin_src elisp
+(defun my-org-inline-css-hook (exporter)
+  (when (eq exporter 'html)
+    (let* ((dir (ignore-errors (file-name-directory (buffer-file-name))))
+           (path (concat dir "style.css"))
+           (homestyle (or (null dir) (null (file-exists-p path))))
+           (final (if homestyle (concat +build-dir "/style.css") path))) ;; <- set your own style file path
+      (setq org-html-head-include-default-style nil)
+      (setq org-html-head (concat
+                           "<style type=\"text/css\">\n"
+                           "<!--/*--><![CDATA[/*><!--*/\n"
+                           (with-temp-buffer
+                             (insert-file-contents final)
+                             (buffer-string))
+                           "/*]]>*/-->\n"
+                           "</style>\n")))))
+
+(add-hook 'org-export-before-processing-hook 'my-org-inline-css-hook)
+(setq org-html-htmlize-output-type 'css)
+#+end_src
+** Rad Trad Stylesheet
+Add this to your org-export script/thing:
+#+begin_src elisp
+(setq org-html-validation-link nil
+      org-html-htmlize-output-type 'css)
+      org-html-head "<link rel=\"stylesheet\" href=\"/style.css\" type=\"text/css\" />"
+#+end_src
+
+* Versioning
+orgcities.css will follow semver, though I doubt I'll ever pass v1 since I don't
+forsee ever breaking anything... :fingers_crossed: However, the HTML output by
+org-export can change with each org version. Due to this, I'm going to attempt
+and match the versions of orgcities.css to the Org version is matches in
+/releases/. So a release tag will look something like =gc-1.1.1-org-9.2.3=.
+
+* Related
+If you hate my stylesheet, first I do not blame you in the least and honestly this was just a joke that I may or may not use myself, and second here are some awesome related projects:
+- [[https://github.com/gongzhitaao/orgcss][gongzhitaao/orgcss]]
+- [[https://github.com/fniessen/org-html-themes][fniessen/org-html-themes]]
+- [[https://gist.github.com/mowen/326524][mowen/gist326524]]
+- [[http://orgmode.org/worg/org-web.html][Web Pages Made with Org-Mode]]
+- [[https://github.com/thomasf/solarized-css][thomasf/solarized-css]]
+- [[http://demo.thi.ng/org-spec/][org-spec]]
+- [[http://doc.norang.ca/org-mode.html][Organize Your Life In Plain Text!]]
+- [[https://olmon.gitlab.io/org-themes/][Org Themes collection]]
+
+  I'd also like to take the extra few bytes to thank gongzhitaao for [[https://github.com/gongzhitaao/orgcss][orgcss]],
+  which +I blatantly ripped off+ inspired me to create this project.
